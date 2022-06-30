@@ -12,3 +12,7 @@
 .bashrc
 .docker/
 .gitconfig
+
+# ignore uploaded files
+*.csv
+w2v_text8_model.pkl
