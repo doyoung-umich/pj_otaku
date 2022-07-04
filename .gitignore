@@ -19,3 +19,7 @@ w2v_text8_model.pkl
 
 # ignore files in nltk folder
 nltk_data/
+
+# ignore pngs
+assets/title_images/
+assets/user_images/
