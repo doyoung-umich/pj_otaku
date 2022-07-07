@@ -3,12 +3,14 @@ import pandas as pd
 import numpy as np
 from st_aggrid import AgGrid, GridOptionsBuilder
 from st_aggrid.shared import GridUpdateMode
+from sklearn.metrics.pairwise import cosine_similarity
+
 
 st.title('Content-based filtering algorithm')
-titles_sim = pd.read_csv('latent_sim.csv').set_index('title_id')
+latent_mat = pd.read_csv('latent_mat.csv').set_index('title_id')
+titles_sim = pd.DataFrame(cosine_similarity(latent_mat), index = latent_mat.index, columns = latent_mat.index)
 titles = pd.read_csv('../assets/titles_200p.csv', index_col = 'title_id')[['title_english','title_romaji','type','genres','synopsis']].loc[titles_sim.index]
 
-titles_sim.columns = titles_sim.index
 
 keyword = st.text_input("What is your favorite anime/comic")
 if keyword == '':
