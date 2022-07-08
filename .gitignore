@@ -23,3 +23,8 @@ nltk_data/
 # ignore pngs
 assets/title_images/
 assets/user_images/
+
+# ignore keras
+.keras/
+*.txt
+.conda/envs/
