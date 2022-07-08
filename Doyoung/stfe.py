@@ -16,7 +16,7 @@ keyword = st.text_input("What is your favorite anime/comic")
 if keyword == '':
     _titles = titles
 else:
-    _titles = titles.fillna('').loc[lambda x : (x.title_english.apply(lambda x : x.lower()).str.contains(keyword)) | (x.title_romaji.apply(lambda x : x.lower()).str.contains(keyword))]
+    _titles = titles.fillna('').loc[lambda x : (x.title_english.apply(lambda x : x.lower()).str.contains(keyword.lower())) | (x.title_romaji.apply(lambda x : x.lower()).str.contains(keyword.lower()))]
     
 def aggrid_interactive_table(df: pd.DataFrame):
     """Creates an st-aggrid interactive table based on a dataframe.
