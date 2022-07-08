@@ -28,3 +28,4 @@ assets/user_images/
 .keras/
 *.txt
 .conda/envs/
+.zip
