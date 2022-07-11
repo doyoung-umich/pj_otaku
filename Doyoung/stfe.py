@@ -7,16 +7,18 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 
 st.title('Content-based filtering algorithm')
-latent_mat = pd.read_csv('latent_mat.csv').set_index('title_id')
-titles_sim = pd.DataFrame(cosine_similarity(latent_mat), index = latent_mat.index, columns = latent_mat.index)
-titles = pd.read_csv('../assets/titles_200p.csv', index_col = 'title_id')[['title_english','title_romaji','type','genres','synopsis']].loc[titles_sim.index]
+
+genre = pd.read_csv('feature_genre.csv', index_col = 'title_id')
+synopsis = pd.read_csv('feature_synopsis.csv', index_col = 'title_id')
+tag = pd.read_csv('feature_tags.csv', index_col = 'title_id').loc[lambda x : x.index.isin(genre.index)]
+
+features = {
+    'genre':genre,
+    'synopsis':synopsis,
+    'tag':tag
+}
 
 
-keyword = st.text_input("What is your favorite anime/comic")
-if keyword == '':
-    _titles = titles
-else:
-    _titles = titles.fillna('').loc[lambda x : (x.title_english.apply(lambda x : x.lower()).str.contains(keyword.lower())) | (x.title_romaji.apply(lambda x : x.lower()).str.contains(keyword.lower()))]
     
 def aggrid_interactive_table(df: pd.DataFrame):
     """Creates an st-aggrid interactive table based on a dataframe.
@@ -46,7 +48,34 @@ def aggrid_interactive_table(df: pd.DataFrame):
     return selection
 
 
+
+titles = pd.read_csv('../assets/titles_200p.csv', index_col = 'title_id')[['title_english','title_romaji','type','genres','synopsis']].loc[genre.index]
+
+
+keyword = st.text_input("What is your favorite anime/comic")
+if keyword == '':
+    _titles = titles
+else:
+    _titles = titles.fillna('').loc[lambda x : (x.title_english.apply(lambda x : x.lower()).str.contains(keyword.lower())) | (x.title_romaji.apply(lambda x : x.lower()).str.contains(keyword.lower()))]
+
 selection = aggrid_interactive_table(df=_titles.reset_index())
+
+options = st.multiselect(
+     'Choose features',
+     ['genre','synopsis','tag'])
+
+title_feature = []
+if len(options) != 0:
+    for option in options:
+        title_feature.append(features[option])
+    latent_mat = pd.concat(title_feature, axis = 1).fillna(0)
+
+else:
+    latent_mat = pd.concat(list(features.values()), axis = 1).fillna(0)
+    
+titles_sim = pd.DataFrame(cosine_similarity(latent_mat), index = latent_mat.index, columns = latent_mat.index)
+
+
 if selection:
     try:
         selected_title = selection["selected_rows"][0]['title_romaji']
