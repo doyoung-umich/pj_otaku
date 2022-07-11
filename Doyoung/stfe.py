@@ -86,3 +86,5 @@ if selection:
     except:
         pass
     
+    
+st.caption(f'Data provided by AniList: https://github.com/AniList/ApiV2-GraphQL-Docs')
