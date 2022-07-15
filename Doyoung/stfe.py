@@ -9,7 +9,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 st.title('Content-based filtering algorithm')
 
 genre = pd.read_csv('feature_genre.csv', index_col = 'title_id')
-synopsis = pd.read_csv('feature_synopsis.csv', index_col = 'title_id')
+synopsis = pd.read_csv('feature_synopsis_minilm.csv', index_col = 'title_id').loc[lambda x : x.index.isin(genre.index)]
 tag = pd.read_csv('feature_tags.csv', index_col = 'title_id').loc[lambda x : x.index.isin(genre.index)]
 
 features = {
@@ -88,3 +88,4 @@ if selection:
     
     
 st.caption(f'Data provided by AniList: https://github.com/AniList/ApiV2-GraphQL-Docs')
+st.caption(f'View git repo: https://github.com/doyoung-umich/pj_otaku')
