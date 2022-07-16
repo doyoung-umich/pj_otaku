@@ -29,3 +29,6 @@ assets/user_images/
 *.txt
 .conda/envs/
 *.zip
+
+# ignore .idea directory
+.idea/
