@@ -135,7 +135,25 @@ query ($page: Int, $perPage: Int) {
                         }
                     }
                 }
-            }            
+            }
+        }
+    }
+}
+"""
+
+
+# query to get user's read/watch list
+list_query = """
+query ($userId: Int, $type: MediaType) {
+    MediaListCollection (userId: $userId, type: $type) {
+        lists {
+            entries {
+                id
+                userId
+                mediaId
+                status
+                repeat
+            }
         }
     }
 }
@@ -147,7 +165,7 @@ def process_reviews(reviews, review_array):
     func to handle "reviews" table
     :param reviews: review content data. Actual info are contained inside "nodes"
     :param review_array: array object that was declared globally prior to calling this function
-    :return: returns review_array where each element is a dict of review data
+    :return: doesn't return anything, but modifies global review_array where each element is a dict of review data
     '''
     nodes = reviews["edges"]
     for node in nodes:
@@ -155,7 +173,7 @@ def process_reviews(reviews, review_array):
         n = node["node"]
         dict_r["review_id"] = n["id"]
         dict_r["title_id"] = n["media"]["id"]
-        dict_r["title_english"] = n["media"]["title]["english]
+        dict_r["title_english"] = n["media"]["title"]["english"]
         dict_r["title_romaji"] = n["media"]["title"]["romaji"]
         if n["user"] is None: # there are a few reviews without user ids
             dict_r["user_id"] = "Unknown"
@@ -176,7 +194,7 @@ def process_tags(tags, title_id, title, tags_array):
     :param title_id: title_id is given so that the resulting data is able to have title-tag structure
     :param title: (same as above)
     :param tags_array: array object that was declared globally prior to calling this function
-    :return: returns tags_array where each element is a dict of title and its associated tag data
+    :return: doesn't return anything, but modifies global tags_array where each element is a dict of title and its associated tag data
     '''
     for tag in tags:
         dict_tags = {}
@@ -198,7 +216,7 @@ def process_studios(studios, title_id, title, studios_array):
     :param title_id: title_id is given so that the resulting data is able to have title-studio structure
     :param title: (same as above)
     :param studios_array: array object that was declared globally prior to calling this function
-    :return: returns studios_array where each element is a dict of title and its associated studio data
+    :return: doesn't return anything, but modifies global studios_array where each element is a dict of title and its associated studio data
     '''
     for node in studios["nodes"]:
         dict_sd = {}
@@ -217,7 +235,7 @@ def process_staff(staff, title_id, title, staff_array):
     :param title_id: title_id is given so that the resulting data is able to have title-staff structure
     :param title: (same as above)
     :param staff_array: array object that was declared globally prior to calling this function
-    :return: returns staff_array where each element is a dict of title and its associated staff data
+    :return: doesn't return anything, but modifies global staff_array where each element is a dict of title and its associated staff data
     '''
     for node in staff["nodes"]:
         dict_st = {}
@@ -239,7 +257,7 @@ def process_title(media, titles_array, review_array, tags_array, studios_array, 
     :param tags_array: (same as above)
     :param studios_array: (same as above)
     :param staff_array: (same as above)
-    :return: returns titles_array where each element is a dict of various data about 1 title
+    :return: doesn't return anything, but modifies global titles_array where each element is a dict of various data about 1 title
     '''
     for t in media:
         dict_t = {}
@@ -283,10 +301,10 @@ def process_favorites(favorites, user_id, favorites_array):
     :param favorites: names of one user"s favorite manga/anime. Actual info are contained inside "nodes"
     :param user_id: user_id is given so that the resulting data is able to have user-favorite_title structure
     :param favorites_array: array object that was declared globally prior to calling this function
-    :return: returns favorites_array where each element is a dict of favorite titles of a user
+    :return: doesn't return anything, but modifies global favorites_array where each element is a dict of favorite titles of a user
     '''
     # loop over anime favorites
-    for node in favorites["anime]["nodes]:
+    for node in favorites["anime"]["nodes"]:
         dict_f = {}
         dict_f["user_id"] = user_id
         dict_f["title_id"] = node["id"]
@@ -298,7 +316,7 @@ def process_favorites(favorites, user_id, favorites_array):
     for node in favorites["manga"]["nodes"]:
         dict_f = {}
         dict_f["user_id"] = user_id
-        dict_f["title_id] = node["id]
+        dict_f["title_id"] = node["id"]
         dict_f["title_english"] = node["title"]["english"]
         dict_f["title_romaji"] = node["title"]["romaji"]
         dict_f["type"] = node["type"]
@@ -311,15 +329,27 @@ def process_users(user, users_array, favorites_array):
     :param user: info of 1 user
     :param users_array: globally declared array
     :param favorites_array: globally declared array
-    :return: returns users_array where each element is a dict of user information
+    :return: doesn't return anything, but modifies global users_array where each element is a dict of user information
     '''
     for u in user:
         dict_u = {}
         dict_u["user_id"] = u["id"]
         dict_u["about"] = u["about"]
-        dict_u["avatar"] = u["avatar"][medium]
+        dict_u["avatar"] = u["avatar"]["medium"]
         process_favorites(u["favourites"], u["id"], favorites_array)
         users_array.append(dict_u)
+
+
+def process_lists(media_list, list_array):
+    for l in media_list:
+        for entry in l["entries"]:
+            dict_l = {}
+            dict_l["list_id"] = entry["id"]
+            dict_l["user_id"] = entry["userId"]
+            dict_l["title_id"] = entry["mediaId"]
+            dict_l["status"] = entry["status"]
+            dict_l["repeat"] = entry["repeat"]
+            list_array.append(dict_l)
 
 
 def data_to_csv(data_array, csv_title, index=True):
@@ -379,29 +409,61 @@ def data_to_csv(data_array, csv_title, index=True):
 # ================================ call API and create user-based data ================================
 
 
-USERS = []
-FAVORITES = []
+# USERS = []
+# FAVORITES = []
+#
+# print(f"~~~~~~~~~~~ start 'users' query processing ~~~~~~~~~~~")
+# for page in range(1,3): # 200 pages x 50 users per page -> 10,000 users
+#     print("page: ", page)
+#     sleep_sec = randint(1,10)
+#     time.sleep(sleep_sec)
+#     print("sleep sec: ", sleep_sec)
+#     variables = {
+#         "page": page, # 1-20
+#         "perPage": 50, # max is 50
+#     }
+#     url = "https://graphql.anilist.co"
+#     response = requests.post(url, json={"query": users_query, "variables": variables})
+#     json_obj = response.json()
+#     print(json_obj)
+#     users = json_obj["data"]["Page"]["users"]
+#     print(users)
+#     process_users(users, USERS, FAVORITES)
+#     # print("USERS: ", USERS)
+#     # print("FAVORITES: ", FAVORITES)
+#
+#
+# # save data to csv
+# data_to_csv(USERS, "users_200p", index=False)
+# data_to_csv(FAVORITES, "favorites_200p", index=False)
 
-print(f"~~~~~~~~~~~ start 'users' query processing ~~~~~~~~~~~")
-for page in range(1,201): # 200 pages x 50 users per page -> 10,000 users
-    print("page: ", page)
-    sleep_sec = randint(1,10)
-    time.sleep(sleep_sec)
-    print("sleep sec: ", sleep_sec)
-    variables = {
-        "page": page, # 1-20
-        "perPage": 50, # max is 50
-    }
-    url = "https://graphql.anilist.co"
-    response = requests.post(url, json={"query": users_query, "variables": variables})
-    json_obj = response.json()
-    print(json_obj)
-    users = json_obj["data"]["Page"]["users"]
-    process_users(users, USERS, FAVORITES)
-    # print("USERS: ", USERS)
-    # print("FAVORITES: ", FAVORITES)
 
+
+# ================================ call API and create user's read/watch list data ================================
+
+
+MEDIALIST = []
+
+print(f"~~~~~~~~~~~ start 'list' query processing ~~~~~~~~~~~")
+for user_id in range(5001, 10001): # 5,000 users
+    for mediatype in ["ANIME", "MANGA"]:
+        print("user_id: ", user_id, " media: ", mediatype)
+        sleep_sec = randint(1,3)
+        time.sleep(sleep_sec)
+        print("sleep sec: ", sleep_sec)
+        variables = {
+            "userId": user_id,
+            "type": mediatype
+        }
+        url = "https://graphql.anilist.co"
+        response = requests.post(url, json={"query": list_query, "variables": variables})
+        json_obj = response.json()
+        try:
+            media_list = json_obj["data"]["MediaListCollection"]["lists"]
+            process_lists(media_list, MEDIALIST)
+            # print("MEDIALIST: ", MEDIALIST)
+        except:
+            print("error at: ", user_id)
 
 # save data to csv
-data_to_csv(USERS, "users_200p", index=False)
-data_to_csv(FAVORITES, "favorites_200p", index=False)
+data_to_csv(MEDIALIST, "media_list_5001_10000_users", index=False)
