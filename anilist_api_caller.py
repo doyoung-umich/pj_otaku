@@ -178,7 +178,7 @@ def process_reviews(reviews, review_array):
         if n["user"] is None: # there are a few reviews without user ids
             dict_r["user_id"] = "Unknown"
         else:
-            dict_r["user_id"] = n[user]["id"]
+            dict_r["user_id"] = n["user"]["id"]
         dict_r["score"] = n["score"] # The score that the reviewer gave to the title
         dict_r["rating"] = n["rating"] # how many users liked the review (ex: if 10 out of 148 users liked this review, this field is 10)
         dict_r["ratingCount"] = n["ratingAmount"] # total number of users who evaluated this review (ex: if 10 out of 148 users liked this review, this field is 148)
@@ -199,7 +199,7 @@ def process_tags(tags, title_id, title, tags_array):
     for tag in tags:
         dict_tags = {}
         dict_tags["tag_id"] = tag["id"]
-        dict_tags["tag_name"] = tag[name]
+        dict_tags["tag_name"] = tag["name"]
         dict_tags["tag_category"] = tag["category"]
         # how tag rank is decided -> https://anilist.co/forum/thread/1991
         dict_tags["tag_rank"] = tag["rank"] # The relevance ranking of the tag out of the 100 for this media
