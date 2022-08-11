@@ -160,6 +160,34 @@ query ($userId: Int, $type: MediaType) {
 """
 
 
+# query to get character image urls
+character_query = """
+query ($page: Int, $perPage: Int) {
+    Page (page: $page, perPage: $perPage) {
+        media(type: MANGA, sort: POPULARITY_DESC) {
+            id
+            title {
+                english
+                romaji
+            }
+            characters {
+                nodes {
+                    id
+                    name {
+                        full
+                    }
+                    image {
+                        large
+                    }
+                }
+            }
+        }
+    }
+}
+"""
+
+
+
 def process_reviews(reviews, review_array):
     '''
     func to handle "reviews" table
@@ -178,7 +206,7 @@ def process_reviews(reviews, review_array):
         if n["user"] is None: # there are a few reviews without user ids
             dict_r["user_id"] = "Unknown"
         else:
-            dict_r["user_id"] = n[user]["id"]
+            dict_r["user_id"] = n["user"]["id"]
         dict_r["score"] = n["score"] # The score that the reviewer gave to the title
         dict_r["rating"] = n["rating"] # how many users liked the review (ex: if 10 out of 148 users liked this review, this field is 10)
         dict_r["ratingCount"] = n["ratingAmount"] # total number of users who evaluated this review (ex: if 10 out of 148 users liked this review, this field is 148)
@@ -199,7 +227,7 @@ def process_tags(tags, title_id, title, tags_array):
     for tag in tags:
         dict_tags = {}
         dict_tags["tag_id"] = tag["id"]
-        dict_tags["tag_name"] = tag[name]
+        dict_tags["tag_name"] = tag["name"]
         dict_tags["tag_category"] = tag["category"]
         # how tag rank is decided -> https://anilist.co/forum/thread/1991
         dict_tags["tag_rank"] = tag["rank"] # The relevance ranking of the tag out of the 100 for this media
@@ -352,6 +380,19 @@ def process_lists(media_list, list_array):
             list_array.append(dict_l)
 
 
+def process_characters(media, chara_array):
+    for m in media:
+        for node in m["characters"]["nodes"]:
+            dict_ch = {}
+            dict_ch["title_id"] = m["id"]
+            dict_ch["title_english"] = m["title"]["english"]
+            dict_ch["title_romaji"] = m["title"]["romaji"]
+            dict_ch["character_id"] = node["id"]
+            dict_ch["character_name"] = node["name"]["full"]
+            dict_ch["character_image_url"] = node["image"]["large"]
+            chara_array.append(dict_ch)
+
+
 def data_to_csv(data_array, csv_title, index=True):
     '''
     func to save array to csv
@@ -439,31 +480,58 @@ def data_to_csv(data_array, csv_title, index=True):
 
 
 
-# ================================ call API and create user's read/watch list data ================================
+# # ================================ call API and create user's read/watch list data ================================
+#
+#
+# MEDIALIST = []
+#
+# print(f"~~~~~~~~~~~ start 'list' query processing ~~~~~~~~~~~")
+# for user_id in range(5001, 10001): # 5,000 users
+#     for mediatype in ["ANIME", "MANGA"]:
+#         print("user_id: ", user_id, " media: ", mediatype)
+#         sleep_sec = randint(1,3)
+#         time.sleep(sleep_sec)
+#         print("sleep sec: ", sleep_sec)
+#         variables = {
+#             "userId": user_id,
+#             "type": mediatype
+#         }
+#         url = "https://graphql.anilist.co"
+#         response = requests.post(url, json={"query": list_query, "variables": variables})
+#         json_obj = response.json()
+#         try:
+#             media_list = json_obj["data"]["MediaListCollection"]["lists"]
+#             process_lists(media_list, MEDIALIST)
+#             # print("MEDIALIST: ", MEDIALIST)
+#         except:
+#             print("error at: ", user_id)
+#
+# # save data to csv
+# data_to_csv(MEDIALIST, "media_list_5001_10000_users", index=False)
 
 
-MEDIALIST = []
 
-print(f"~~~~~~~~~~~ start 'list' query processing ~~~~~~~~~~~")
-for user_id in range(5001, 10001): # 5,000 users
-    for mediatype in ["ANIME", "MANGA"]:
-        print("user_id: ", user_id, " media: ", mediatype)
-        sleep_sec = randint(1,3)
-        time.sleep(sleep_sec)
-        print("sleep sec: ", sleep_sec)
-        variables = {
-            "userId": user_id,
-            "type": mediatype
-        }
-        url = "https://graphql.anilist.co"
-        response = requests.post(url, json={"query": list_query, "variables": variables})
-        json_obj = response.json()
-        try:
-            media_list = json_obj["data"]["MediaListCollection"]["lists"]
-            process_lists(media_list, MEDIALIST)
-            # print("MEDIALIST: ", MEDIALIST)
-        except:
-            print("error at: ", user_id)
+# ================================ call API and retrieve character image url data ================================
+
+
+CHARACTERS = []
+
+print(f"~~~~~~~~~~~ start 'characters' query processing ~~~~~~~~~~~")
+for page in range(1,200):
+    print("page: ", page)
+    sleep_sec = randint(1,3)
+    time.sleep(sleep_sec)
+    print("sleep sec: ", sleep_sec)
+    variables = {
+        "page": page,
+        "perPage": 50
+    }
+    url = "https://graphql.anilist.co"
+    response = requests.post(url, json={"query": character_query, "variables": variables})
+    json_obj = response.json()
+    media = json_obj["data"]["Page"]["media"]
+    process_characters(media, CHARACTERS)
+    # print("CHARACTERS: ", CHARACTERS)
 
 # save data to csv
-data_to_csv(MEDIALIST, "media_list_5001_10000_users", index=False)
+data_to_csv(CHARACTERS, "characters_200p", index=False)
