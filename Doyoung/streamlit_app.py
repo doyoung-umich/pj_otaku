@@ -42,12 +42,12 @@ if st.session_state['yes']:
     placeholder.empty()
 
 
-    f = open('/home/.Import/dburl.json')
+    f = open('../../.Import/dburl.json')
     dburl = json.load(f)
     f.close()
 
 
-    cred = credentials.Certificate('/home/.Import/project-otaku.json')
+    cred = credentials.Certificate('../../.Import/project-otaku.json')
 
 
     try:
@@ -162,13 +162,13 @@ if st.session_state['yes']:
         final_selected_title_id = st.session_state['selected_titles'].loc[lambda x : x.title_romaji.isin(selected_titles)].title_id.tolist()
         final_selected_title_name = st.session_state['selected_titles'].loc[lambda x : x.title_romaji.isin(selected_titles)].title_romaji.tolist()
 
-    # algo = st.radio(
-    #  "algorithm:",
-    #  ('CBF', 'UBF'))
-    # if algo == 'CBF':
-    #     st.session_state['abtest_id'] = 0
-    # else:
-    #     st.session_state['abtest_id'] = 1
+    algo = st.radio(
+     "algorithm:",
+     ('CBF', 'UBF'))
+    if algo == 'CBF':
+        st.session_state['abtest_id'] = 0
+    else:
+        st.session_state['abtest_id'] = 1
     
 ####################### initializing algorithms #########################
 
@@ -289,7 +289,7 @@ if st.session_state['yes']:
 
 
 ####################### displaying the result #########################
-
+        
         for idx, s in result.iterrows():
             try:
                 if type(s.loc['title_english']) == float:

@@ -23,6 +23,11 @@ nltk_data/
 # ignore pngs
 assets/title_images/
 assets/user_images/
+assets/
+
+.config/
+.gsutil/
+Ryota/runs/
 
 # ignore keras
 .keras/
