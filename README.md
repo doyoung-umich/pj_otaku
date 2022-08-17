@@ -22,8 +22,8 @@ The main goal of this project is to develop a recommender system that recommends
   - **abtest.ipynb**: Data retrieval from the realtime database, statistical tests, and calculation of evaluation metrics
   - **streamlit_app.py**: Development of a web application
 
-### The algorithms
-* Content-based algorithm
+### Example usages
+* Content-based filtering algorithm
 ```python
 # refer to 2.RecommenderSystem/2.1 Content based filtering/cbf_walkthrought.ipynb
 import pandas as pd
@@ -44,4 +44,10 @@ cbf.create_sim_mat(title_feature, method = 'cosine_similarity')
 
 # Check the sanity of the system with the chosen title_id.
 cbf.check_sanity(title_id = 30002, max_num = 10, in_romaji = True, only_popular = True)
+```
+![ example outcome of check_sanity](https://github.com/doyoung-umich/pj_otaku/blob/main/Sample%20Images/cbf.png "example outcome of check_sanity")
+
+* User-based filtering algorithm
+```python
+
 ```
