@@ -103,5 +103,21 @@ display(df_titles[df_titles["title_id"].isin(res)])
 
 #### Drawing similarity
 ```python
-
+# refer to 2.RecommenderSystem/2.3 User based filtering/Character image recommendation.ipynb
+ibr_search = ImageBasedRecommendation("../assets/character_images/character_images_grayscale/")
 ```
+##### Character image similarity
+```python
+res = ibr_search.recommend_titles_from_similar_characters(query_character_id=137304, top_n=10)
+print(res)
+```
+- Example outcome
+<img src="https://github.com/doyoung-umich/pj_otaku/blob/main/Sample%20Images/img_embedding_character_sim.png" width="300" height="300">
+
+##### Title similarity
+```python
+res = ibr_search.recommend_titles_from_similar_image_embedding(query_title_id=30002, top_n=3)
+print(res)
+```
+- Example outcome
+<img src="https://github.com/doyoung-umich/pj_otaku/blob/main/Sample%20Images/img_embedding_title_sim.png" width="300" height="300">
