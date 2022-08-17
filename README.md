@@ -10,7 +10,7 @@ The main goal of this project is to develop a recommender system that recommends
   - **Structural analysis of synopsis BERT.ipynb**: Exploration of synopsis text - visualizations in the vector space
 * 2.RecommenderSystem
   - **2.1 Content based filtering**
-    - **cbf_walkthrough.ipynb**: An example usage of cbfilter.py
+    - **Descriptive Stats and Wordcloud.ipynb**: An example usage of cbfilter.py
     - **cbfilter.py**: A recommendation module powered by content-based filtering
     - **Content Based Filtering Algorithm-Walkthrough.ipynb**: Feature engineering, Creating a title-latent factor matrix, Calculating the similarity between titles
   - **2.2 User based filtering**
