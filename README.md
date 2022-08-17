@@ -45,7 +45,8 @@ cbf.create_sim_mat(title_feature, method = 'cosine_similarity')
 # Check the sanity of the system with the chosen title_id.
 cbf.check_sanity(title_id = 30002, max_num = 10, in_romaji = True, only_popular = True)
 ```
-![ example outcome of check_sanity](https://github.com/doyoung-umich/pj_otaku/blob/main/Sample%20Images/cbf.png "example outcome of check_sanity"){: width="300" height="300"}
+
+<img src="https://github.com/doyoung-umich/pj_otaku/blob/main/Sample%20Images/cbf.png" width="300" height="300">
 
 * User-based filtering algorithm
 ```python
