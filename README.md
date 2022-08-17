@@ -1,9 +1,9 @@
 # Project Otaku
 
-### Project Goal and Motivation
+## Project Goal and Motivation
 The main goal of this project is to develop a recommender system that recommends a title of an Anime or “Manga” (Japanese comics), depending on the preferences of the querying user and the type of algorithm implemented.
 
-### Repo folder structure
+## Repo folder structure
 * 1.EDA
   - **Descriptive Stats and Wordcloud.ipynb**: Descriptive statistics, correlation in genres, anime vs. manga comparison, wordcloud charts
   - **Network analysis of studios and staff.ipynb**: The network analysis of the studios and staff
@@ -22,8 +22,8 @@ The main goal of this project is to develop a recommender system that recommends
   - **abtest.ipynb**: Data retrieval from the realtime database, statistical tests, and calculation of evaluation metrics
   - **streamlit_app.py**: Development of a web application
 
-### Example usages
-#### Content-based filtering algorithm
+## Example usages
+### Content-based filtering algorithm
 ```python
 # refer to 2.RecommenderSystem/2.1 Content based filtering/cbf_walkthrought.ipynb
 import pandas as pd
@@ -48,7 +48,7 @@ cbf.check_sanity(title_id = 30002, max_num = 10, in_romaji = True, only_popular 
 - Example outcome
 <img src="https://github.com/doyoung-umich/pj_otaku/blob/main/Sample%20Images/cbf.png" width="300" height="300">
 
-#### User-based filtering algorithm
+### User-based filtering algorithm
 ```python
 # refer to 2.RecommenderSystem/2.2 User based filtering/Recommendation Module.ipynb
 import pandas as pd
@@ -101,7 +101,7 @@ display(df_titles[df_titles["title_id"].isin(res)])
 - Example outcome
 <img src="https://github.com/doyoung-umich/pj_otaku/blob/main/Sample%20Images/ubf_titleusermatrix.png" width="300" height="300">
 
-#### Drawing similarity
+### Drawing similarity
 ```python
 # refer to 2.RecommenderSystem/2.3 User based filtering/Character image recommendation.ipynb
 ibr_search = ImageBasedRecommendation("../assets/character_images/character_images_grayscale/")
