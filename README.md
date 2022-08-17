@@ -5,7 +5,7 @@ The main goal of this project is to develop a recommender system that recommends
 
 ### Repo folder structure
 * 1.EDA
-  - **henry_notebook_01.ipynb**: Descriptive statistics, correlation in genres, anime vs. manga comparison, wordcloud charts
+  - **Descriptive Stats and Wordcloud.ipynb**: Descriptive statistics, correlation in genres, anime vs. manga comparison, wordcloud charts
   - **Network analysis of studios and staff.ipynb**: The network analysis of the studios and staff
   - **Structural analysis of synopsis BERT.ipynb**: Exploration of synopsis text - visualizations in the vector space
 * 2.RecommenderSystem
