@@ -45,10 +45,63 @@ cbf.create_sim_mat(title_feature, method = 'cosine_similarity')
 # Check the sanity of the system with the chosen title_id.
 cbf.check_sanity(title_id = 30002, max_num = 10, in_romaji = True, only_popular = True)
 ```
-
+- Example outcome
 <img src="https://github.com/doyoung-umich/pj_otaku/blob/main/Sample%20Images/cbf.png" width="300" height="300">
 
 * User-based filtering algorithm
+```python
+# refer to 2.RecommenderSystem/2.2 User based filtering/Recommendation Module.ipynb
+import pandas as pd
+import numpy as np
+
+# Initialize
+ubf = UserBasedFiltering()
+
+# Load titles data for checking purposes
+df_titles = pd.read_csv("titles.csv")
+```
+#### Recommendation from user_id
+```python
+# calculate similarity and similar user ids
+top_10_similar_user_ids = ubf.get_similar_users_from_user_id(start_col=1, dist_metric="cosine_similarity", query_user_id=QUERY_USER_ID)
+
+# make recommendation
+recommended_titles = ubf.recommend_unread_titles(10, top_10_similar_user_ids, method="refer_popularity")
+
+# show recommendations
+display(df_titles[df_titles["title_id"].isin(recommended_titles)].head(3))
+```
+- Example outcome
+<img src="https://github.com/doyoung-umich/pj_otaku/blob/main/Sample%20Images/ubf_userid.png" width="300" height="300">
+
+#### Recommendation from list of title_ids
+```python
+# example query title_id list
+ex_titles_romance = [72451, 97852, 85135, 101583, 87395, 59211, 132182, 30145, 41514, 86481]
+
+top_10_similar_user_ids = ubf.get_similar_users_from_titles(ex_titles_romance)
+
+# make recommendation
+recommended_titles = ubf.recommend_unread_titles(10, top_10_similar_user_ids, method="refer_others")
+
+# show recommendations
+display(df_titles[df_titles["title_id"].isin(recommended_titles)].head(3))
+```
+- Example outcome
+<img src="https://github.com/doyoung-umich/pj_otaku/blob/main/Sample%20Images/ubf_titleid.png" width="300" height="300">
+
+#### Recommendation from a title, but refering to title-user matrix
+```python
+query_title_id = 105778 # Chainsaw man (popular, recent, dark fantasy) -> SPYxFAMILY 
+res = ubf.recommend_from_other_user_histories(query_title_id)
+
+# show recommendations
+display(df_titles[df_titles["title_id"].isin(res)])
+```
+- Example outcome
+<img src="https://github.com/doyoung-umich/pj_otaku/blob/main/Sample%20Images/ubf_titleusermatrix.png" width="300" height="300">
+
+* Drawing similarity
 ```python
 
 ```
