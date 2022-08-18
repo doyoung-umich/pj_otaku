@@ -9,15 +9,22 @@ The main goal of this project is to develop a recommender system that recommends
   - **Network analysis of studios and staff.ipynb**: The network analysis of the studios and staff
   - **Structural analysis of synopsis BERT.ipynb**: Exploration of synopsis text - visualizations in the vector space
 * 2.RecommenderSystem
-  - **2.1 Content based filtering**
+  - 2.1 Content based filtering
     - **Descriptive Stats and Wordcloud.ipynb**: An example usage of cbfilter.py
     - **cbfilter.py**: A recommendation module powered by content-based filtering
     - **Content Based Filtering Algorithm-Walkthrough.ipynb**: Feature engineering, Creating a title-latent factor matrix, Calculating the similarity between titles
-  - **2.2 User based filtering**
+  - 2.2 User based filtering
     - **Recommendation Module.ipynb**: A recommendation module powered by user-based filtering and an example usage of the module
     - **Structural analysis of user data**: Data processing, calculate user similarity by genre probability distribution
-  - **2.3 Image embedding**
-    - **Character image recommendation.ipynb**: Data processing, model training, creating image embedding, creating a recommender module powered by image similarity
+  - 2.3 Image embedding
+    - **notebooks named Model_XXXXXX.ipynb**: Trains the given model and creates image embeddings to make image based recommendations
+    - **Image Preprocessing.ipynb**: Image Data processing
+    - **Model_AE_Regular_CNN.ipynb**: Baseline (Regular CNN Autoencoder) model
+    - **Model_VAE_Regular_CNN.ipynb**: Basic VAE model
+    - **Model_AE_Inception_Encoder_and_Decoder.ipynb**: AE with Inception Encoder and Decoder model
+    - **Model_VAE_Inception_Encoder_and_Decoder.ipynb**: VAE with Inception Encoder and Decoder model
+    - **Model_AE_Inception_Encoder_only.ipynb**: AE with Inception Encoder model
+    - **Model_AE_Inception_Encoder_only_deeper_more_images.ipynb**: AE with Deeper Inception Encoder (trained with more images)
 * 3.App and Evaluation
   - **abtest.ipynb**: Data retrieval from the realtime database, statistical tests, and calculation of evaluation metrics
   - **streamlit_app.py**: Development of a web application
