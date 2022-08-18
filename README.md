@@ -110,7 +110,7 @@ display(df_titles[df_titles["title_id"].isin(res)])
 
 ### Drawing similarity
 ```python
-# refer to 2.RecommenderSystem/2.3 User based filtering/Character image recommendation.ipynb
+# refer to 2.RecommenderSystem/2.3 User based filtering/Model_AE_Inception_Encoder_and_Decoder.ipynb.ipynb
 ibr_search = ImageBasedRecommendation("../assets/character_images/character_images_grayscale/")
 ```
 ##### Character image similarity
