@@ -4,6 +4,12 @@
 The main goal of this project is to develop a recommender system that recommends a title of an Anime or “Manga” (Japanese comics), depending on the preferences of the querying user and the type of algorithm implemented.
 
 ## Repo folder structure
+* 0.Data Retrieval
+  - Link to sample data in [google drive](https://drive.google.com/drive/folders/1mye7jkS1qZCagoWpATB_gMr_jAdvBRlr?usp=sharing)
+  - **Dataset Walkthrough.ipynb**: Notebook to walkthrough the data (referenced paths in the notebook are vm instance folder paths, so doesn't work if run locally)
+  - **anilist_api_caller.py**: Script to run various data retrieval codes
+  - **cleaner.py**: Script to clean text data (mainly synopsis)
+  - **image_collector.py**: Script to retrieve images
 * 1.EDA
   - **Descriptive Stats and Wordcloud.ipynb**: Descriptive statistics, correlation in genres, anime vs. manga comparison, wordcloud charts
   - **Network analysis of studios and staff.ipynb**: The network analysis of the studios and staff
