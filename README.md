@@ -20,8 +20,9 @@ The main goal of this project is to develop a recommender system that recommends
     - **cbfilter.py**: A recommendation module powered by content-based filtering
     - **Content Based Filtering Algorithm-Walkthrough.ipynb**: Feature engineering, Creating a title-latent factor matrix, Calculating the similarity between titles
   - 2.2 User based filtering
-    - **Recommendation Module.ipynb**: A recommendation module powered by user-based filtering and an example usage of the module
     - **Structural analysis of user data**: Data processing, calculate user similarity by genre probability distribution
+    - **ubfilter.py**: The actual recommendation module that is powered by user-based filtering
+    - **User Based Filtering Algorithm-Walkthrough.ipynb**: Walkthrough of the recommendations using ubfilter.py
   - 2.3 Image embedding
     - **notebooks named Model_XXXXXX.ipynb**: Trains the given model and creates image embeddings to make image based recommendations
     - **Image Preprocessing.ipynb**: Image Data processing
@@ -31,6 +32,7 @@ The main goal of this project is to develop a recommender system that recommends
     - **Model_VAE_Inception_Encoder_and_Decoder.ipynb**: VAE with Inception Encoder and Decoder model
     - **Model_AE_Inception_Encoder_only.ipynb**: AE with Inception Encoder model
     - **Model_AE_Inception_Encoder_only_deeper_more_images.ipynb**: AE with Deeper Inception Encoder (trained with more images)
+    - **ibfilter.py**: Image based recommendation module
 * 3.App and Evaluation
   - **abtest.ipynb**: Data retrieval from the realtime database, statistical tests, and calculation of evaluation metrics
   - **streamlit_app.py**: Development of a web application
@@ -116,8 +118,8 @@ display(df_titles[df_titles["title_id"].isin(res)])
 
 ### Drawing similarity
 ```python
-# refer to 2.RecommenderSystem/2.3 User based filtering/Model_AE_Inception_Encoder_and_Decoder.ipynb.ipynb
-ibr_search = ImageBasedRecommendation("../assets/character_images/character_images_grayscale/")
+# refer to 2.RecommenderSystem/2.3 Image embedding/Model_AE_Inception_Encoder_and_Decoder.ipynb
+ibr_search = ImageBasedRecommendation("../assets/character_images/character_images_grayscale/", "v2")
 ```
 ##### Character image similarity
 ```python
