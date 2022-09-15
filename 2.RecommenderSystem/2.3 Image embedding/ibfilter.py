@@ -13,8 +13,8 @@ def plot_images(path, character_ids):
         character_ids: id of characters to draw
     :returns
         it doesn't return but plots the images
-    
     '''
+
     rows, columns = 2, 5
     imgs = []
     character_ids = character_ids[:10+1]
@@ -67,8 +67,8 @@ class ImageBasedRecommendation:
             top_n: how many similar characters to get
         :returns
             list of recommended titles
-
         '''
+
         # show the querying character
         df_q = self.df_characters[self.df_characters["character_id"]==query_character_id]
         print("Queried character: ", df_q["character_name"].unique(), " who appears in: ", df_q["title_romaji"].unique())
@@ -81,7 +81,7 @@ class ImageBasedRecommendation:
         df_top = df[1:top_n+1]
         top_ids = list(df_top.index.astype(int))
         plot_images(self.query_path, top_ids)
-        
+
         # print character names
         print("Similar characters (in the order of appearance)")
         for chara_id in top_ids:
@@ -92,7 +92,7 @@ class ImageBasedRecommendation:
         df_res = self.df_characters[self.df_characters["character_id"].isin(top_ids)]
         df_res = df_res.drop_duplicates(subset="character_name")
         recc_title_ids = df_res["title_id"].unique()
-        
+
         return recc_title_ids
 
     def recommend_titles_from_similar_image_embedding(self, query_title_id, top_n):
@@ -104,6 +104,7 @@ class ImageBasedRecommendation:
         :returns
             list of recommended titles
         '''
+
         # query title and pull out similar titles
         df = self.df_title_sim_mat[query_title_id].sort_values(ascending=False)
         df_top = df[0:top_n+1]
