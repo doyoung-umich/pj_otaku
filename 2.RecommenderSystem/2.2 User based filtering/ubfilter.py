@@ -12,6 +12,7 @@ class UserBasedFiltering:
         '''
         Initializes UserBasedFiltering with necessary data to run it efficiently
         '''
+
         # Load various data first
         self.df_titles = pd.read_csv("/mnt/disks/sdb/home/dy0904k/assets/titles_2000p.csv")
         self.df_titles_genre = pd.read_csv("/mnt/disks/sdb/home/dy0904k/assets/ryota_title_genre_2000p.csv")
@@ -34,6 +35,7 @@ class UserBasedFiltering:
         :returns
             list of top 10 similar user_ids
         '''
+
         # Calculate user similarities
         df = self.df_user_genre_dist
         id_list = df["user_id"]
@@ -60,6 +62,7 @@ class UserBasedFiltering:
         :returns
             list of top 10 similar user_ids
         '''
+
         # refer to users with more than 50 titles -> more stable genre distribution
         df_user_mlist_count = self.df_mlist_genre[["user_id", "mlist_count"]]
         df_user_mlist_count = df_user_mlist_count[df_user_mlist_count["mlist_count"]>threshold]
@@ -92,6 +95,7 @@ class UserBasedFiltering:
         :returns
             avgerage of overlap ratio
         '''
+
         df = self.df_mlist
         overlap_ratios = []
         df_q = df[df["user_id"]==query_user_id]
@@ -120,6 +124,7 @@ class UserBasedFiltering:
         :returns
             list of title_id as recommendation
         '''
+
         # get title_ids that the querying user hasn't read but similar users have
         df_mlist_similar_user = self.df_mlist[self.df_mlist["user_id"].isin(similar_user_list)]
         df_mlist_q_user = self.df_mlist[self.df_mlist["user_id"]==query_user_id]
@@ -147,8 +152,8 @@ class UserBasedFiltering:
             output_neighbors: n_neighbors parameter to set with NearestNeighbors
         :returns
             list of title_id recommendations
-
         '''
+
         q_title_idx = self.titlle_idx_list.index(q_title_id)
         distances, indices = self.model.kneighbors(self.mat_title_user[q_title_idx], n_neighbors=output_neighbors+1) # output_neighbors+1 because it always puts q_title_id as result
         indices = indices[indices != q_title_idx] # remove queried title_id from result
